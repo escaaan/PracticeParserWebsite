@@ -24,30 +24,18 @@ namespace web_site_parser
 
             using (var writer = new StreamWriter(fullPath, false, System.Text.Encoding.UTF8))
             {
-                // Заголовки
-                writer.WriteLine(string.Join(";", tableData.Headers.Select(EscapeCsvValue)));
+                writer.WriteLine(string.Join(";", tableData.Headers));
 
-                // Данные
                 foreach (var row in tableData.Rows)
                 {
-                    writer.WriteLine(string.Join(";", row.Select(EscapeCsvValue)));
+                    writer.WriteLine(string.Join(";", row));
                 }
             }
 
             log.Debug($"Файл успешно сохранен: {fullPath}");
             return fullPath;
         }
-
-        private static string EscapeCsvValue(string value)
-        {
-            if (string.IsNullOrEmpty(value)) return "";
-
-            // Экранируем, если есть спецсимволы
-            if (value.Contains(';') || value.Contains('"') || value.Contains('\n'))
-            {
-                return '"' + value.Replace("\"", "\"\"") + '"';
-            }
-            return value;
-        }
     }
 }
+
+
