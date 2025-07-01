@@ -4,9 +4,6 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using web_site_parser;
 
 namespace web_site_parser
 {
@@ -14,7 +11,7 @@ namespace web_site_parser
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(TableParser));
 
-        public async Task<TableData> ParseTable(string url)
+        public TableData ParseTable(string url)
         {
             log.Info($"Начало парсинга таблицы с URL: {url}");
 
@@ -22,7 +19,7 @@ namespace web_site_parser
             {
                 var config = Configuration.Default.WithDefaultLoader();
                 var context = BrowsingContext.New(config);
-                var document = await context.OpenAsync(url);
+                var document = context.OpenAsync(url).GetAwaiter().GetResult();
 
                 var table = document.QuerySelector("table") ?? throw new Exception("Таблица не найдена");
                 log.Debug("Таблица найдена на странице");
@@ -57,5 +54,3 @@ namespace web_site_parser
         }
     }
 }
-
-

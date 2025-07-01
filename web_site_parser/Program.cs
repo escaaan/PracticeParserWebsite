@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using web_site_parser;
@@ -11,10 +10,8 @@ namespace web_site_parser
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
-            
-                      
             var logRepository = LogManager.GetRepository(System.Reflection.Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
@@ -22,19 +19,19 @@ namespace web_site_parser
 
             try
             {
-                string url = "https://www.wienerborse.at/en/bonds/?c7928-page=1&per-page=50&c";
+                string url = "https://www.wienerborse.at/en/indices-austria/";
                 log.Debug($"Введен URL: {url}");
 
                 var parser = new TableParser();
-                var tableData = await parser.ParseTable(url);
+                var tableData = parser.ParseTable(url);
 
                 log.Info($"Успешно распарсено: {tableData.Rows.Count} строк");
 
                 string csvPath = CsvExporter.SaveAsCsv(tableData);
 
-                Console.WriteLine($"\nДанные сохранены в: {csvPath}");
-                Console.WriteLine($"\nЗаголовки: {string.Join(" | ", tableData.Headers)}");
-                Console.WriteLine($"Всего строк: {tableData.Rows.Count}");
+                //Console.WriteLine($"\nДанные сохранены в: {csvPath}");
+                //Console.WriteLine($"\nЗаголовки: {string.Join(" | ", tableData.Headers)}");
+                //Console.WriteLine($"Всего строк: {tableData.Rows.Count}");
 
                 log.Info($"Данные сохранены в файл: {csvPath}");
             }
@@ -46,7 +43,7 @@ namespace web_site_parser
             finally
             {
                 log.Info("Завершение работы приложения");
-                Console.ReadKey();
+                Console.ReadKey();// чтобы консоль сразу не закрывалась 
             }
         }
     }
