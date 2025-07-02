@@ -29,9 +29,9 @@ namespace web_site_parser
 
                 string csvPath = CsvExporter.SaveAsCsv(tableData);
 
-                //Console.WriteLine($"\nДанные сохранены в: {csvPath}");
-                //Console.WriteLine($"\nЗаголовки: {string.Join(" | ", tableData.Headers)}");
-                //Console.WriteLine($"Всего строк: {tableData.Rows.Count}");
+                log.Info($"\nДанные сохранены в: {csvPath}");
+                log.Info($"\nЗаголовки: {string.Join(" | ", tableData.Headers)}");
+                log.Info($"Всего строк: {tableData.Rows.Count}");
 
                 log.Info($"Данные сохранены в файл: {csvPath}");
             }

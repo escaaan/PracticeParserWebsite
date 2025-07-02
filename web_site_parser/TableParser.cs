@@ -24,14 +24,16 @@ namespace web_site_parser
                 var table = document.QuerySelector("table") ?? throw new Exception("Таблица не найдена");
                 log.Debug("Таблица найдена на странице");
 
-                // Парсим заголовки
+                #region Заголовки
                 var headers = table.QuerySelectorAll("thead th, tr:first-child th")
                     .Select(th => th.TextContent.Trim())
                     .ToList();
 
                 log.Debug($"Найдено {headers.Count} заголовков");
+                #endregion
 
-                // Парсим данные
+
+                #region Строки 
                 var rows = new List<List<string>>();
                 foreach (var row in table.QuerySelectorAll("tbody tr, tr:not(:first-child)"))
                 {
@@ -42,6 +44,7 @@ namespace web_site_parser
                     if (cells.Count == headers.Count)
                         rows.Add(cells);
                 }
+                #endregion
 
                 log.Info($"Успешно распарсено {rows.Count} строк таблицы");
                 return new TableData(headers, rows);

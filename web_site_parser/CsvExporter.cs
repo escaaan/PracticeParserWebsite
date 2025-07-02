@@ -24,11 +24,13 @@ namespace web_site_parser
 
             using (var writer = new StreamWriter(fullPath, false, System.Text.Encoding.UTF8))
             {
-                writer.WriteLine(string.Join(";", tableData.Headers));
+                //writer.WriteLine(string.Join(";", tableData.Headers));// сохраняет каждый элемент в отдельную ячейку
+                writer.WriteLine(string.Join("\t", tableData.Headers));  // сохраняет все элементы через таб в одну ячейку
 
                 foreach (var row in tableData.Rows)
                 {
-                    writer.WriteLine(string.Join(";", row));
+                 //   writer.WriteLine(string.Join(";", row));// сохраняет каждый элемент в отдельную ячейку
+                    writer.WriteLine(string.Join("\t", row));// сохраняет все элементы через таб в одну ячейку
                 }
             }
 
