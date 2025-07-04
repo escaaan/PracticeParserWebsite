@@ -17,11 +17,8 @@ namespace web_site_parser
 
             log.Info("Запуск приложения TableParser");
 
-            string url = "https://www.wienerborse.at/en/indices-cee/";
-            log.Debug($"Введен URL: {url}");
-
             var parser = new TableParser();
-            var tableData = parser.ParseTable(url);
+            var tableData = parser.ParseTable();
 
             string csvPath = CsvExporter.SaveAsCsv(tableData);
             log.Info("Приложение закончило работу");
