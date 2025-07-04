@@ -17,34 +17,15 @@ namespace web_site_parser
 
             log.Info("Запуск приложения TableParser");
 
-            try
-            {
-                string url = "https://www.wienerborse.at/en/indices-austria/";
-                log.Debug($"Введен URL: {url}");
+            string url = "https://www.wienerborse.at/en/indices-cee/";
+            log.Debug($"Введен URL: {url}");
 
-                var parser = new TableParser();
-                var tableData = parser.ParseTable(url);
+            var parser = new TableParser();
+            var tableData = parser.ParseTable(url);
 
-                log.Info($"Успешно распарсено: {tableData.Rows.Count} строк");
+            string csvPath = CsvExporter.SaveAsCsv(tableData);
+            log.Info("Приложение закончило работу");
 
-                string csvPath = CsvExporter.SaveAsCsv(tableData);
-
-                log.Info($"\nДанные сохранены в: {csvPath}");
-                log.Info($"\nЗаголовки: {string.Join(" | ", tableData.Headers)}");
-                log.Info($"Всего строк: {tableData.Rows.Count}");
-
-                log.Info($"Данные сохранены в файл: {csvPath}");
-            }
-            catch (Exception ex)
-            {
-                log.Error("Произошла ошибка в работе приложения", ex);
-                Console.WriteLine($"Произошла ошибка: {ex.Message}");
-            }
-            finally
-            {
-                log.Info("Завершение работы приложения");
-                Console.ReadKey();// чтобы консоль сразу не закрывалась 
-            }
         }
     }
 }
