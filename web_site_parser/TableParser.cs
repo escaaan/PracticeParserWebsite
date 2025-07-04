@@ -17,21 +17,24 @@ namespace web_site_parser
             string url = "https://www.wienerborse.at/en/indices-cee/";
             log.Debug($"Начало парсинга таблицы с URL: {url}");
 
-            
-                var config = Configuration.Default.WithDefaultLoader();
-                var context = BrowsingContext.New(config);
-                var document = context.OpenAsync(url).GetAwaiter().GetResult();
 
-                var table = document.QuerySelector("table") ?? throw new Exception("Таблица не найдена");
-                log.Debug("Таблица найдена на странице");
+            var config = Configuration.Default.WithDefaultLoader();
+            var context = BrowsingContext.New(config);
+            var document = context.OpenAsync(url).GetAwaiter().GetResult();
+            if (document == null || document.DocumentElement == null)
+            {
+                log.Error($"Не удалось загрузить документ по URL: {url}");
+            }
+            var table = document.QuerySelector("table") ?? throw new Exception("Таблица не найдена");
+            log.Debug("Таблица найдена на странице");
 
-                
-                var headers = table.QuerySelectorAll("thead th, tr:first-child th")
-                    .Select(th => th.TextContent.Trim())
-                    .ToList();
-                log.Debug($"Найдено {headers.Count} заголовков");
 
-                var rows = new List<List<string>>();
+            var headers = table.QuerySelectorAll("thead th, tr:first-child th")
+                .Select(th => th.TextContent.Trim())
+                .ToList();
+            log.Debug($"Найдено {headers.Count} заголовков");
+
+            var rows = new List<List<string>>();
 
             try
             {
@@ -41,13 +44,17 @@ namespace web_site_parser
                     var cells = row.QuerySelectorAll("td, th")
                         .Select(cell => cell.TextContent.Trim())
                         .ToList();
-
+                    rows.Add(cells);
                     if (cells.Count == headers.Count)
                         rows.Add(cells);
+                    else
+                    {
+                        log.Error("Количество заголовков не совпадает с количеством столбцов");
+                    }
                 }
 
                 log.Info($"Успешно распарсено {rows.Count} строк таблицы");
-               
+
             }
             catch (Exception ex)
             {

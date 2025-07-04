@@ -12,18 +12,19 @@ namespace web_site_parser
 
         public static string SaveAsCsv(TableData tableData)
         {
+            log.Debug($"Начало экспорта данных в CSV. Получено {tableData.Headers?.Count ?? 0} заголовков и {tableData.Rows?.Count ?? 0} строк");
+
+            string fileName = $"bonds_{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.csv";
+            string directory = Path.Combine(Directory.GetCurrentDirectory(), "Exports");
+
+            log.Info($"Подготовка директории для экспорта: {directory}");
+            Directory.CreateDirectory(directory);
+
+            string fullPath = Path.Combine(directory, fileName);
+            log.Info($"Создание CSV файла по пути: {fullPath}");
             try
             {
-                log.Debug($"Начало экспорта данных в CSV. Получено {tableData.Headers?.Count ?? 0} заголовков и {tableData.Rows?.Count ?? 0} строк");
-
-                string fileName = $"bonds_{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.csv";
-                string directory = Path.Combine(Directory.GetCurrentDirectory(), "Exports");
-
-                log.Info($"Подготовка директории для экспорта: {directory}");
-                Directory.CreateDirectory(directory);
-
-                string fullPath = Path.Combine(directory, fileName);
-                log.Info($"Создание CSV файла по пути: {fullPath}");
+                
 
                 using (var writer = new StreamWriter(fullPath, false, System.Text.Encoding.UTF8))
                 {
@@ -42,14 +43,13 @@ namespace web_site_parser
 
                 log.Debug($"CSV файл успешно сохранен. Размер: {new FileInfo(fullPath).Length} байт");
 
-                return fullPath;
+                
             }
             catch (Exception ex)
             {
                 log.Error($"Ошибка при экспорте в CSV: {ex.Message}", ex);
-                throw;
             }
-
+            return fullPath;
         }
     }
 }
