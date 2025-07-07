@@ -14,7 +14,7 @@ namespace web_site_parser
         {
             log.Debug($"Начало экспорта данных в CSV. Получено {tableData.Headers?.Count ?? 0} заголовков и {tableData.Rows?.Count ?? 0} строк");
 
-            string fileName = $"bonds_{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.csv";
+            string fileName = $"bonds_{DateTime.Now:dd-MM-yyyy}.csv";
             string directory = Path.Combine(Directory.GetCurrentDirectory(), "Exports");
 
             log.Info($"Подготовка директории для экспорта: {directory}");
