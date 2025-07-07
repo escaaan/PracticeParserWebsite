@@ -14,7 +14,7 @@ namespace web_site_parser
 
         public TableData ParseTable()
         {
-            string url = "https://www.wienerborse.at/en/indices-cee/";
+            string url = "https://www.wienerborse.at/en/indices-austria/";
             log.Debug($"Начало парсинга таблицы с URL: {url}");
 
 
@@ -44,7 +44,7 @@ namespace web_site_parser
                     var cells = row.QuerySelectorAll("td, th")
                         .Select(cell => cell.TextContent.Trim())
                         .ToList();
-                    rows.Add(cells);
+
                     if (cells.Count == headers.Count)
                         rows.Add(cells);
                     else
